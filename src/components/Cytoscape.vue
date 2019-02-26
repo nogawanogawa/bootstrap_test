@@ -1,12 +1,33 @@
 <template>
   <div id="view">
-    <button v-on:click="add_node">push</button>
     <div id="cy"></div>
   </div>
 </template>
 
 <script>
 var cytoscape = require('cytoscape')
+
+var elements = {
+  nodes: [
+    { data: { id: 'cat' } },
+    { data: { id: 'bird' } },
+    { data: { id: 'ladybug' } },
+    { data: { id: 'aphid' } },
+    { data: { id: 'rose' } },
+    { data: { id: 'grasshopper' } },
+    { data: { id: 'plant' } },
+    { data: { id: 'wheat' } }
+  ],
+  edges: [
+    { data: { source: 'cat', target: 'bird' } },
+    { data: { source: 'bird', target: 'ladybug' } },
+    { data: { source: 'bird', target: 'grasshopper' } },
+    { data: { source: 'grasshopper', target: 'plant' } },
+    { data: { source: 'grasshopper', target: 'wheat' } },
+    { data: { source: 'ladybug', target: 'aphid' } },
+    { data: { source: 'aphid', target: 'rose' } }
+  ]
+}
 
 export default {
   name: 'Cytoscape',
@@ -38,46 +59,26 @@ export default {
           style: cytoscape.stylesheet()
               .selector('node')
               .css({
-                'height': 80,
-                'width': 80,
+                'height': 40,
+                'width': 40,
                 'background-fit': 'cover',
                 'border-color': '#000',
-                'border-width': 3,
+                'border-width': 2,
                 'border-opacity': 0.5,
-                'content': 'data(name)',
-                'text-valign': 'center'
+                'content': 'data(id)',
+                'text-valign': 'center',
+                'color': '#000'
               })
               .selector('edge')
               .css({
-                'width': 6,
-                'target-arrow-shape': 'triangle',
+                'width': 4,
                 'line-color': '#ffaaaa',
                 'target-arrow-color': '#ffaaaa',
                 'curve-style': 'bezier'
               }),
-          elements: {
-            nodes: [
-              { data: { id: 'cat' } },
-              { data: { id: 'bird' } },
-              { data: { id: 'ladybug' } },
-              { data: { id: 'aphid' } },
-              { data: { id: 'rose' } },
-              { data: { id: 'grasshopper' } },
-              { data: { id: 'plant' } },
-              { data: { id: 'wheat' } }
-            ],
-            edges: [
-              { data: { source: 'cat', target: 'bird' } },
-              { data: { source: 'bird', target: 'ladybug' } },
-              { data: { source: 'bird', target: 'grasshopper' } },
-              { data: { source: 'grasshopper', target: 'plant' } },
-              { data: { source: 'grasshopper', target: 'wheat' } },
-              { data: { source: 'ladybug', target: 'aphid' } },
-              { data: { source: 'aphid', target: 'rose' } }
-            ]
-          },
+          elements: elements,
           layout: {
-            name: 'breadthfirst',
+            name: 'circle',
             directed: true,
             padding: 10
           }
@@ -96,9 +97,9 @@ export default {
 <style scoped>
 #cy {
     width: 100%;
-    height: 80%;
+    height: 100%;
     position: absolute;
-    top: 50px;
+    top: 60px;
     left: 0px;
     text-align: left;
 }
