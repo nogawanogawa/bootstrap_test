@@ -9,14 +9,14 @@ var cytoscape = require('cytoscape')
 
 var elements = {
   nodes: [
-    { data: { id: 'cat' } },
-    { data: { id: 'bird' } },
-    { data: { id: 'ladybug' } },
-    { data: { id: 'aphid' } },
-    { data: { id: 'rose' } },
-    { data: { id: 'grasshopper' } },
-    { data: { id: 'plant' } },
-    { data: { id: 'wheat' } }
+    { data: { id: 'cat', name: '猫'} },
+    { data: { id: 'bird', name: '鳥'} },
+    { data: { id: 'ladybug', name: 'てんとう虫'} },
+    { data: { id: 'aphid',name: 'aphid'} },
+    { data: { id: 'rose', name: 'rose'} },
+    { data: { id: 'grasshopper', name: 'grasshopper'} },
+    { data: { id: 'plant' , name: 'plant'} },
+    { data: { id: 'wheat' , name: 'wheat'} }
   ],
   edges: [
     { data: { source: 'cat', target: 'bird' } },
@@ -44,47 +44,53 @@ export default {
   },
   methods: {
     add_node: function () {
-      console.info(this.cy)
+//      console.info(this.cy)
       this.cy.add([
         { 'group': 'nodes', data: { 'id': 'node' + this.count }, position: { x: 300, y: 200 } },
         {'group': 'edges', data: {'id': 'edge' + this.count, 'source': 'node' + this.count, 'target': 'cat'}}
       ])
     },
     view_init: function () {
-      this.cy = cytoscape(
-        {
-          container: document.getElementById('cy'),
-          boxSelectionEnabled: false,
-          autounselectify: true,
-          style: cytoscape.stylesheet()
-              .selector('node')
-              .css({
-                'height': 40,
-                'width': 40,
-                'background-fit': 'cover',
-                'border-color': '#000',
-                'border-width': 2,
-                'border-opacity': 0.5,
-                'content': 'data(id)',
-                'text-valign': 'center',
-                'color': '#000'
-              })
-              .selector('edge')
-              .css({
-                'width': 4,
-                'line-color': '#ffaaaa',
-                'target-arrow-color': '#ffaaaa',
-                'curve-style': 'bezier'
-              }),
-          elements: elements,
-          layout: {
-            name: 'circle',
-            directed: true,
-            padding: 10
-          }
+      var cy = cytoscape({
+        container: document.getElementById('cy'),
+
+        boxSelectionEnabled: false,
+        autounselectify: true,
+
+        style: cytoscape.stylesheet()
+          .selector('node')
+            .css({
+              'content': 'data(name)',
+              'text-valign': 'center',
+              'color': 'white',
+              'text-outline-width': 2,
+              'text-outline-color': '#888',
+              'background-color': '#888'
+            })
+          .selector(':selected')
+            .css({
+              'background-color': 'black',
+              'line-color': 'black',
+              'target-arrow-color': 'black',
+              'source-arrow-color': 'black',
+              'text-outline-color': 'black'
+            }),
+
+        elements: elements,
+
+        layout: {
+          name: 'circle',
+          padding: 10
         }
-      )
-    }
+      });
+
+      cy.on('tap', 'node', function(){
+        try { // your browser may block popups
+          window.open( this.data('href') );
+        } catch(e){ // fall back on url change
+          window.location.href = this.data('href');
+        }
+      });    }
   },
   computed: {
   },

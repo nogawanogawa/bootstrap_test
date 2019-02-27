@@ -10,14 +10,12 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import Cytoscape from './components/Cytoscape.vue'
 import NavigationBar from './components/NavigationBar.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld,
     Cytoscape,
     NavigationBar
   }
