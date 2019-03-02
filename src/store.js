@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+var script = require("./search.js");
+
 const store = new Vuex.Store({
   state: {
     elements: {
@@ -10,11 +12,11 @@ const store = new Vuex.Store({
         { data: { id: 'cat', name: '猫'} },
         { data: { id: 'bird', name: '鳥'} },
         { data: { id: 'ladybug', name: 'てんとう虫'} },
-        { data: { id: 'aphid',name: 'aphid'} },
-        { data: { id: 'rose', name: 'rose'} },
-        { data: { id: 'grasshopper', name: 'grasshopper'} },
-        { data: { id: 'plant' , name: 'plant'} },
-        { data: { id: 'wheat' , name: 'wheat'} }
+        { data: { id: 'aphid',name: 'アブラムシ'} },
+        { data: { id: 'rose', name: 'バラ'} },
+        { data: { id: 'grasshopper', name: 'バッタ'} },
+        { data: { id: 'plant' , name: '植木鉢'} },
+        { data: { id: 'wheat' , name: '小麦'} }
       ],
       edges: [
         { data: { source: 'cat', target: 'bird' } },
@@ -27,6 +29,19 @@ const store = new Vuex.Store({
       ]
     }
   },
+  getters: {
+  },
+  mutation: {
+    search(state, newElements):{
+      state.node = newElements.nodes
+      state.edges = newElements.edges
+    }
+  },
+  actions:{
+    searchAction(ctx, word) {
+      ctx.commit('search', script.search(word))
+    }
+  }
 })
 
 export default store
