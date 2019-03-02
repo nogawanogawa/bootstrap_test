@@ -3,8 +3,6 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-var script = require("./search.js");
-
 const store = new Vuex.Store({
   state: {
     elements: {
@@ -32,13 +30,14 @@ const store = new Vuex.Store({
   getters: {
   },
   mutation: {
-    search(state, newElements):{
+    search(state, newElements){
       state.node = newElements.nodes
       state.edges = newElements.edges
     }
   },
   actions:{
     searchAction(ctx, word) {
+      var script = require("./search.js");
       ctx.commit('search', script.search(word))
     }
   }
