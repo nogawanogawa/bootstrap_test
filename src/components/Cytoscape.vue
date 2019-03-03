@@ -29,7 +29,10 @@ export default {
       ])
     },
     view_init: function () {
+      var new_element = this.$store.state.elements
+
       var cy = cytoscape({
+        elements: new_element,
         container: document.getElementById('cy'),
 
         boxSelectionEnabled: false,
@@ -54,8 +57,6 @@ export default {
               'text-outline-color': 'black'
             }),
 
-        elements: this.$store.state.elements,
-
         layout: {
           name: 'circle',
           padding: 10
@@ -68,9 +69,18 @@ export default {
         } catch(e){ // fall back on url change
           window.location.href = this.data('href');
         }
-      });    }
+      });
+    }
   },
   computed: {
+    word: function() {
+      return this.$store.state.word
+    }
+  },
+  watch: {
+    word: function (){
+      this.view_init()
+    }
   },
   mounted: function () {
     this.view_init()

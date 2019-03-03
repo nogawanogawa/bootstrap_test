@@ -25,20 +25,42 @@ const store = new Vuex.Store({
         { data: { source: 'ladybug', target: 'aphid' } },
         { data: { source: 'aphid', target: 'rose' } }
       ]
-    }
+    },
+    word: "test"
   },
   getters: {
   },
-  mutation: {
+  mutations: {
     search(state, newElements){
-      state.node = newElements.nodes
-      state.edges = newElements.edges
+      state.elements.nodes = newElements.edges
+      state.elements.edges = newElements.nodes
+      state.word = "hoge"
+    },
+    update(state, result){
+      state.word = result
     }
   },
   actions:{
     searchAction(ctx, word) {
-      var script = require("./search.js");
-      ctx.commit('search', script.search(word))
+      const neo4j = require('neo4j-driver').v1;
+      const uri = "bolt://localhost";
+      const user = "neo4j";
+      const password = "password";
+      const driver = neo4j.driver(uri, neo4j.auth.basic(user, password), {maxTransactionRetryTime: 30000});
+      const session = driver.session();
+
+      const resultPromise = session.run(
+        'MATCH (a{name: $name}) - [r] - (n) RETURN a, r, n',
+        {name: word}
+      );
+
+      resultPromise.then(result => {
+        session.close();
+        driver.close();
+
+        ctx.commit('search', result)
+      })
+
     }
   }
 })
